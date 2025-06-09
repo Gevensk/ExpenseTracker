@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/budgetListFragment">
+    <fragment
+        android:id="@+id/budgetListFragment"
+        android:name="com.gracedev.expensetracker.view.BudgetListFragment"
+        android:label="fragment_budget_list"
+        tools:layout="@layout/fragment_budget_list" >
+        <action
+            android:id="@+id/actionCreateBudget"
+            app:destination="@id/createBudgetingFragment2"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/createBudgetingFragment2"
+        android:name="com.gracedev.expensetracker.view.CreateBudgetingFragment"
+        android:label="fragment_create_budgeting"
+        tools:layout="@layout/fragment_create_budgeting" />
+</navigation>

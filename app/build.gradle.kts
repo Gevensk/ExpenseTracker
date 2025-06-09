@@ -8,7 +8,12 @@ plugins {
 
 android {
     namespace = "com.gracedev.expensetracker"
-    compileSdk = 34
+    compileSdk = 35
+
+    buildFeatures {
+        viewBinding = true
+    }
+
 
     defaultConfig {
         applicationId = "com.gracedev.expensetracker"
@@ -39,7 +44,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.google.android.material:material:1.11.0")
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
     implementation(libs.room.runtime)
