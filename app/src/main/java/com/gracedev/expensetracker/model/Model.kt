@@ -9,7 +9,7 @@ data class Budget(
     @ColumnInfo(name="name")
     var name:String,
     @ColumnInfo(name="budget")
-    var budget:String
+    var budget:Int
 ) {
     @PrimaryKey(autoGenerate = true)
     var uuid: Int = 0

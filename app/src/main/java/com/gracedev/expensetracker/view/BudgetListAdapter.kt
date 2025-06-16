@@ -13,17 +13,20 @@ class BudgetListAdapter(private val budgetList: ArrayList<Budget>)
         : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
-        val binding = BudgetItemLayoutBinding.inflate(
+        var binding = BudgetItemLayoutBinding.inflate(
             LayoutInflater.from(parent.context), parent, false)
         return BudgetViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
         holder.binding.txtName.text = budgetList[position].name
-        holder.binding.txtNominal.text=budgetList[position].budget
+        holder.binding.txtNominal.text=budgetList[position].budget.toString()
     }
 
-    override fun getItemCount(): Int = budgetList.size
+    override fun getItemCount(): Int {
+        return budgetList.size
+    }
+
 
     fun updateTodoList(newTodoList: List<Budget>) {
         budgetList.clear()

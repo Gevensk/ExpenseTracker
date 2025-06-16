@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.gracedev.expensetracker.model.Budget
 import com.gracedev.expensetracker.model.BudgetDatabase
+import com.gracedev.expensetracker.util.buildDb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,9 +27,7 @@ class ListBudgetViewModel (application: Application)
         loadingLD.value = true
         budgetLoadErrorLD.value = false
         launch {
-            val db = BudgetDatabase.buildDatabase(
-                getApplication()
-            )
+            val db = buildDb(getApplication())
 
             budgetLD.postValue(db.budgetDao().selectAllTodo())
             loadingLD.postValue(false)

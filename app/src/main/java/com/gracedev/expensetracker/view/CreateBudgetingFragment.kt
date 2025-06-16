@@ -22,11 +22,11 @@ class CreateBudgetingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailBudgetViewModel::class.java)
         binding.btnAdd.setOnClickListener {
-            var todo = Budget(
+            var budget = Budget(
                 binding.txtNama.text.toString(),
-                binding.txtNominal.text.toString()
+                binding.txtNominal.text.toString().toInt()
             )
-            val list = listOf(todo)
+            val list = listOf(budget)
             viewModel.addTodo(list)
             Toast.makeText(view.context, "Data added", Toast.LENGTH_LONG).show()
             Navigation.findNavController(it).popBackStack()

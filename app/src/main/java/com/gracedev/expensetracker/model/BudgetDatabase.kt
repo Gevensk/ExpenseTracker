@@ -4,8 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.gracedev.expensetracker.util.DB_NAME
 
-@Database(entities = arrayOf(Budget::class), version =  1)
+@Database(entities = arrayOf(Budget::class), version =  2)
 abstract class BudgetDatabase: RoomDatabase() {
     abstract fun budgetDao(): BudgetDao
 
@@ -17,7 +18,8 @@ abstract class BudgetDatabase: RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 BudgetDatabase::class.java,
-                "newbudgetdb").build()
+                DB_NAME
+                ).build()
         operator fun invoke(context:Context) {
             if(instance == null) {
                 synchronized(LOCK) {
