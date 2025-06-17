@@ -11,13 +11,24 @@
         tools:layout="@layout/fragment_budget_list" >
         <action
             android:id="@+id/actionCreateBudget"
-            app:destination="@id/createBudgetingFragment2"
+            app:destination="@id/createBudgetingFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/actionEditBudgetFragment"
+            app:destination="@id/editBudgetFragment" />
     </fragment>
     <fragment
-        android:id="@+id/createBudgetingFragment2"
+        android:id="@+id/createBudgetingFragment"
         android:name="com.gracedev.expensetracker.view.CreateBudgetingFragment"
         android:label="fragment_create_budgeting"
         tools:layout="@layout/fragment_create_budgeting" />
+    <fragment
+        android:id="@+id/editBudgetFragment"
+        android:name="com.gracedev.expensetracker.view.EditBudgetFragment"
+        android:label="EditBudgetFragment" >
+        <argument
+            android:name="uuid"
+            app:argType="integer" />
+    </fragment>
 </navigation>

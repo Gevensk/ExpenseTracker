@@ -29,7 +29,7 @@ class ListBudgetViewModel (application: Application)
         launch {
             val db = buildDb(getApplication())
 
-            budgetLD.postValue(db.budgetDao().selectAllTodo())
+            budgetLD.postValue(db.budgetDao().selectAllBudget())
             loadingLD.postValue(false)
         }
     }
@@ -39,9 +39,9 @@ class ListBudgetViewModel (application: Application)
             val db = BudgetDatabase.buildDatabase(
                 getApplication()
             )
-            db.budgetDao().deleteTodo(budget)
+            db.budgetDao().deleteBudget(budget)
 
-            budgetLD.postValue(db.budgetDao().selectAllTodo())
+            budgetLD.postValue(db.budgetDao().selectAllBudget())
         }
     }
 

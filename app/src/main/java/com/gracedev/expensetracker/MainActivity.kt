@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         navController = (supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment).navController
-        NavigationUI.setupActionBarWithNavController(this, navController)
+//        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
