@@ -1,0 +1,39 @@
+package com.gracedev.expensetracker.view
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.gracedev.expensetracker.R
+
+
+class ExpenseListTrackerFragment : Fragment() {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_expense_list_tracker, container, false)
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            ExpenseListTrackerFragment().apply {
+                arguments = Bundle().apply {
+
+                }
+            }
+    }
+}
