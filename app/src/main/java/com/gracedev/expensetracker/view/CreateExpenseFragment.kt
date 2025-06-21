@@ -5,12 +5,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.gracedev.expensetracker.R
-
+import com.gracedev.expensetracker.databinding.FragmentCreateExpenseBinding
+import com.gracedev.expensetracker.viewmodel.ListBudgetViewModel
 
 
 class CreateExpenseFragment : Fragment() {
+    private lateinit var binding: FragmentCreateExpenseBinding
+    private lateinit var viewModel: ListBudgetViewModel
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(ListBudgetViewModel::class.java)
+        viewModel.refresh()
+
+        viewModel.budgetLD.observe(viewLifecycleOwner, Observer { budgets ->
+            val spinnerItems = budgets.map { it.name }
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, spinnerItems)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinner.adapter = adapter
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +43,8 @@ class CreateExpenseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_expense, container, false)
+        binding = FragmentCreateExpenseBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     companion object {

@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/budgetListFragment">
+    app:startDestination="@id/itemExpTracker">
+
     <fragment
-        android:id="@+id/budgetListFragment"
+        android:id="@+id/itemExpTracker"
+        android:name="com.gracedev.expensetracker.view.ExpenseListTrackerFragment"
+        android:label="Expense Tracker"
+        tools:layout="@layout/fragment_expense_list_tracker" />
+
+    <fragment
+        android:id="@+id/itemBudgeting"
         android:name="com.gracedev.expensetracker.view.BudgetListFragment"
         android:label="fragment_budget_list"
         tools:layout="@layout/fragment_budget_list" >
@@ -18,11 +25,13 @@
             android:id="@+id/actionEditBudgetFragment"
             app:destination="@id/editBudgetFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/createBudgetingFragment"
         android:name="com.gracedev.expensetracker.view.CreateBudgetingFragment"
         android:label="fragment_create_budgeting"
         tools:layout="@layout/fragment_create_budgeting" />
+
     <fragment
         android:id="@+id/editBudgetFragment"
         android:name="com.gracedev.expensetracker.view.EditBudgetFragment"
@@ -31,4 +40,6 @@
             android:name="uuid"
             app:argType="integer" />
     </fragment>
+
+
 </navigation>

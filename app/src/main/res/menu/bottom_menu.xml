@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/itemExpTracker"
+        android:icon="@drawable/baseline_add_card_24"
+        android:title="Expense Tracker"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/itemBudgeting"
+        android:icon="@drawable/baseline_pie_chart_24"
+        android:title="Budgeting"
+        app:showAsAction="always" />
+</menu>

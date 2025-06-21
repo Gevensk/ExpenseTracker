@@ -8,14 +8,25 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
+import com.gracedev.expensetracker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        navController = (supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment).navController
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragmentHost) as NavHostFragment
+        navController = navHostFragment.navController
+
+        binding.bottomNav.setupWithNavController(navController)
+
+//        navController = (supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment).navController
 //        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
