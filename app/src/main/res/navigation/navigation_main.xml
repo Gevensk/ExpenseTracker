@@ -6,10 +6,20 @@
     app:startDestination="@id/itemExpTracker">
 
     <fragment
+        android:id="@+id/createExpenseFragment"
+        android:name="com.gracedev.expensetracker.view.CreateExpenseFragment"
+        android:label="Create Expense"
+        tools:layout="@layout/fragment_create_expense" />
+    <fragment
         android:id="@+id/itemExpTracker"
         android:name="com.gracedev.expensetracker.view.ExpenseListTrackerFragment"
         android:label="Expense Tracker"
-        tools:layout="@layout/fragment_expense_list_tracker" />
+        tools:layout="@layout/fragment_expense_list_tracker" >
+
+        <action
+            android:id="@+id/actionCreateExpenseFragment"
+            app:destination="@id/createExpenseFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/itemBudgeting"

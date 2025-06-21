@@ -18,7 +18,6 @@ interface BudgetDao {
     @Update
     fun updateBudget(budget:Budget)
 
-
     @Query("SELECT * FROM budget")
     fun selectAllBudget(): List<Budget>
 
