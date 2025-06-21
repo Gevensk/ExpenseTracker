@@ -22,14 +22,36 @@ class CreateBudgetingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailBudgetViewModel::class.java)
         binding.btnAdd.setOnClickListener {
-            var budget = Budget(
-                binding.txtNama.text.toString(),
-                binding.txtNominal.text.toString().toInt()
-            )
-            val list = listOf(budget)
-            viewModel.addTodo(list)
-            Toast.makeText(view.context, "Data added", Toast.LENGTH_LONG).show()
-            Navigation.findNavController(it).popBackStack()
+            val nama = binding.txtNama.text.toString()
+            val nominalStr = binding.txtNominal.text.toString()
+
+            if (nama.isEmpty()) {
+                Toast.makeText(view.context, "Nama harus diisi", Toast.LENGTH_SHORT).show()
+            }
+            else if (nominalStr.isEmpty()) {
+                Toast.makeText(view.context, "Nominal harus diisi", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val nominal = nominalStr.toIntOrNull()
+                if (nominal == null || nominal <= 0) {
+                    Toast.makeText(view.context, "Nominal harus angka positif", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    val budget = Budget(nama, nominal)
+                    val list = listOf(budget)
+                    viewModel.addTodo(list)
+                    Toast.makeText(view.context, "Data added", Toast.LENGTH_SHORT).show()
+                    Navigation.findNavController(it).popBackStack()
+                }
+            }
+//            var budget = Budget(
+//                binding.txtNama.text.toString(),
+//                binding.txtNominal.text.toString().toInt()
+//            )
+//            val list = listOf(budget)
+//            viewModel.addTodo(list)
+//            Toast.makeText(view.context, "Data added", Toast.LENGTH_LONG).show()
+//            Navigation.findNavController(it).popBackStack()
         }
 
     }
