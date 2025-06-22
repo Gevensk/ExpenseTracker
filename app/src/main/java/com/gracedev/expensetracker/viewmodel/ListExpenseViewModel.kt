@@ -33,6 +33,10 @@ class ListExpenseViewModel(application: Application)
         }
     }
 
+    fun getTotalExpenseByBudgetId(budgetId: Int) =
+        buildDb(getApplication()).expenseDao().getTotalExpenseByBudgetId(budgetId)
+
+
     fun refreshByBudget(budgetId: Int) {
         loadingLD.value = true
         expenseLoadErrorLD.value = false

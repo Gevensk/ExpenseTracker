@@ -6,11 +6,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gracedev.expensetracker.databinding.ExpenseItemLayoutBinding
 import com.gracedev.expensetracker.model.Expense
 
-class ExpenseListAdapter(private val expenseList: ArrayList<Expense>) :
+class ExpenseListAdapter(private val expenseList: ArrayList<Expense>,
+                         private val budgetNameMap: Map<Int, String> = emptyMap()) :
     RecyclerView.Adapter<ExpenseListAdapter.ExpenseViewHolder>() {
 
     class ExpenseViewHolder(val binding: ExpenseItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    private var budgetMap: Map<Int, String> = emptyMap()
+
+    fun setBudgetMap(map: Map<Int, String>) {
+        budgetMap = map
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
         val binding = ExpenseItemLayoutBinding.inflate(
@@ -21,12 +29,12 @@ class ExpenseListAdapter(private val expenseList: ArrayList<Expense>) :
 
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         val expense = expenseList[position]
+
         holder.binding.txtDate.text = expense.date
         holder.binding.textNominal.text = "IDR ${expense.nominal}"
-        holder.binding.chipBudget.text = "ID: ${expense.budgetId}"
-        // Bisa diganti jika ada notes/keterangan
-
-        // Bisa tambahkan event onClick jika mau ada aksi edit/hapus nanti
+        // Ambil nama budget dari map
+        val budgetName = budgetMap[expense.budgetId] ?: "Unknown"
+        holder.binding.chipBudget.text = budgetName
     }
 
     override fun getItemCount(): Int {

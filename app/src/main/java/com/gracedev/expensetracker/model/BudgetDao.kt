@@ -12,8 +12,8 @@ interface BudgetDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg budget:Budget)
 
-    @Query("UPDATE budget SET name=:name, budget=:budget WHERE uuid = :id")
-        fun update(name:String, budget:Int, id:Int)
+    @Query("UPDATE budget SET name = :name, budget = :budget WHERE uuid = :uuid")
+    fun update(name: String, budget: Int, uuid: Int)
 
     @Update
     fun updateBudget(budget:Budget)

@@ -28,7 +28,6 @@ class ListBudgetViewModel (application: Application)
         budgetLoadErrorLD.value = false
         launch {
             val db = buildDb(getApplication())
-
             budgetLD.postValue(db.budgetDao().selectAllBudget())
             loadingLD.postValue(false)
         }

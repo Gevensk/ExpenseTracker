@@ -35,6 +35,8 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:text=" IDR 250.000"
+        android:textAlignment="viewEnd"
+        android:gravity="end"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

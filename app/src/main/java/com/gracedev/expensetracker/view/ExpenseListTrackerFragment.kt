@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gracedev.expensetracker.R
 import com.gracedev.expensetracker.databinding.FragmentExpenseListTrackerBinding
+import com.gracedev.expensetracker.viewmodel.ListBudgetViewModel
 import com.gracedev.expensetracker.viewmodel.ListExpenseViewModel
 
 
@@ -18,6 +19,9 @@ class ExpenseListTrackerFragment : Fragment() {
     private lateinit var binding: FragmentExpenseListTrackerBinding
     private lateinit var viewModel: ListExpenseViewModel
     private val expenseAdapter = ExpenseListAdapter(arrayListOf())
+    private lateinit var budgetViewModel: ListBudgetViewModel
+    private var budgetMap = mutableMapOf<Int, String>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,6 +38,16 @@ class ExpenseListTrackerFragment : Fragment() {
             val action = ExpenseListTrackerFragmentDirections.actionCreateExpenseFragment()
             Navigation.findNavController(it).navigate(action)
         }
+
+        budgetViewModel = ViewModelProvider(this).get(ListBudgetViewModel::class.java)
+        budgetViewModel.refresh()
+
+        budgetViewModel.budgetLD.observe(viewLifecycleOwner, Observer { budgets ->
+            budgetMap.clear()
+            budgets.forEach { budgetMap[it.uuid] = it.name }
+            // update adapter supaya nama budget muncul
+            expenseAdapter.setBudgetMap(budgetMap)
+        })
     }
     fun observeViewModel() {
         viewModel.expenseLD.observe(viewLifecycleOwner, Observer {

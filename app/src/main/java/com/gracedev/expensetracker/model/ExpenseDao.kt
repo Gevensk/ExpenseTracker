@@ -1,5 +1,6 @@
 package com.gracedev.expensetracker.model
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -28,7 +29,10 @@ interface ExpenseDao {
     fun selectExpenseByBudgetId(budgetId: Int): List<Expense>
 
     @Query("SELECT SUM(nominal) FROM expense WHERE budget_id = :budgetId")
-    fun getTotalExpenseByBudgetId(budgetId: Int): Int?
+    fun getTotalExpenseByBudgetId(budgetId: Int): LiveData<Int?>
+
+//    @Query("SELECT SUM(nominal) FROM expense WHERE budget_id = :budgetId")
+//    fun getTotalExpenseByBudgetId(budgetId: Int): Int?
 
     @Delete
     fun deleteExpense(expense: Expense)
