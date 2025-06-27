@@ -18,4 +18,10 @@
         android:title="Report"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/itemProfile"
+        android:icon="@drawable/baseline_person_24"
+        android:title="Profile"
+        app:showAsAction="always"/>
+
 </menu>
