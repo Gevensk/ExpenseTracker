@@ -22,6 +22,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/itemReport"
+        android:name="com.gracedev.expensetracker.view.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" />
+
+    <fragment
         android:id="@+id/itemBudgeting"
         android:name="com.gracedev.expensetracker.view.BudgetListFragment"
         android:label="fragment_budget_list"
