@@ -32,15 +32,33 @@ class EditBudgetFragment : Fragment() {
 
         binding.txtJudulBudget.text = "Edit Budget"
         binding.btnAdd.text = "Save Changes"
-        binding.btnAdd.setOnClickListener {
-            viewModel.update(
-                binding.txtNama.text.toString(),
-                binding.txtNominal.text.toString().toInt(),
-                uuid)
-            Toast.makeText(view.context, "Budget updated", Toast.LENGTH_SHORT).show()
-            Navigation.findNavController(it).popBackStack()
-        }
+        viewModel.fetchTotalExpense(uuid)
+        viewModel.totalExpenseLD.observe(viewLifecycleOwner, Observer { total ->
+            val totalExpense = total ?: 0
 
+            binding.btnAdd.setOnClickListener {
+                val newBudget = binding.txtNominal.text.toString().toInt()
+                val name = binding.txtNama.text.toString()
+
+                if (newBudget <= 0) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Budget tidak boleh kurang atau sama dengan 0",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else if (newBudget < totalExpense) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Budget tidak boleh lebih kecil dari total pengeluaran: $totalExpense",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    viewModel.update(name, newBudget, uuid)
+                    Toast.makeText(view.context, "Budget updated", Toast.LENGTH_SHORT).show()
+                    Navigation.findNavController(it).popBackStack()
+                }
+            }
+        })
     }
 
     fun observeViewModel() {

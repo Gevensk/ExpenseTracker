@@ -28,7 +28,7 @@ class ListExpenseViewModel(application: Application)
         expenseLoadErrorLD.value = false
         launch {
             val db = buildDb(getApplication())
-            expenseLD.postValue(db.expenseDao().selectAllExpense())
+            expenseLD.postValue(db.expenseDao().selectAllExpenseOrdered())
             loadingLD.postValue(false)
         }
     }
@@ -51,7 +51,7 @@ class ListExpenseViewModel(application: Application)
         launch {
             val db = BudgetDatabase.buildDatabase(getApplication())
             db.expenseDao().deleteExpense(expense)
-            expenseLD.postValue(db.expenseDao().selectAllExpense())
+            expenseLD.postValue(db.expenseDao().selectAllExpenseOrdered())
         }
     }
 }

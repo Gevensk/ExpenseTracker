@@ -1,5 +1,6 @@
 package com.gracedev.expensetracker.model
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -20,6 +21,9 @@ interface BudgetDao {
 
     @Query("SELECT * FROM budget")
     fun selectAllBudget(): List<Budget>
+
+    @Query("SELECT name FROM budget WHERE uuid = :budgetId")
+    fun getBudgetNameById(budgetId: Int): LiveData<String>
 
     @Query("SELECT * FROM budget WHERE uuid= :id")
     fun selectBudget(id:Int): Budget

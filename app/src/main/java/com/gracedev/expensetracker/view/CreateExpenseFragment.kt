@@ -17,6 +17,7 @@ import com.gracedev.expensetracker.viewmodel.ListExpenseViewModel
 import java.text.NumberFormat
 import java.util.Locale
 import android.app.DatePickerDialog
+import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,39 +69,52 @@ class CreateExpenseFragment : Fragment() {
 
             binding.btnAdd.setOnClickListener {
                 val selectedPosition = binding.spinner.selectedItemPosition
-
-                // Ambil budget yang dipilih dari ViewModel
                 viewModel.budgetLD.value?.let { budgets ->
                     val selectedBudget = budgets[selectedPosition]
+                    val budgetId = selectedBudget.uuid
+                    val totalBudget = selectedBudget.budget
+
                     val name = binding.txtNotes.text.toString()
                     val nominal = binding.txtNominal.text.toString().toIntOrNull() ?: 0
-                    val date = binding.txtDate.text.toString()  // Kamu bisa ganti ini dengan DatePicker nanti
+                    val date = binding.txtDate.text.toString()
 
-                    // Buat data Expense
-                    val newExpense = com.gracedev.expensetracker.model.Expense(
-                        name = name,
-                        nominal = nominal,
-                        date = date,
-                        budgetId = selectedBudget.uuid
-                    )
-
-                    // Simpan ke database
-                    val detailViewModel = ViewModelProvider(this)[com.gracedev.expensetracker.viewmodel.DetailExpenseViewModel::class.java]
-                    detailViewModel.addExpense(listOf(newExpense))
-
-                    // Reset input & update progress bar
-                    binding.txtNominal.setText("")
-                    binding.txtNotes.setText("")
-
-                    // Update progress bar langsung
-                    expenseViewModel.getTotalExpenseByBudgetId(selectedBudget.uuid)
+                    expenseViewModel.getTotalExpenseByBudgetId(budgetId)
                         .observe(viewLifecycleOwner) { totalExpense ->
                             val used = totalExpense ?: 0
-                            binding.progressBar.progress = used
-                            binding.txtUsedBudget.text = "Rp$used"
+                            val remaining = totalBudget - used
+
+                            if (nominal <= 0) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Pengeluaran tidak boleh kurang atau sama dengan 0",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }else if (nominal > remaining) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Pengeluaran melebihi sisa budget (tersisa Rp${formatter.format(remaining)})",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                val newExpense = com.gracedev.expensetracker.model.Expense(
+                                    name = name,
+                                    nominal = nominal,
+                                    date = date,
+                                    budgetId = budgetId
+                                )
+
+                                val detailViewModel = ViewModelProvider(this)[com.gracedev.expensetracker.viewmodel.DetailExpenseViewModel::class.java]
+                                detailViewModel.addExpense(listOf(newExpense))
+
+                                Toast.makeText(requireContext(), "Pengeluaran ditambahkan", Toast.LENGTH_SHORT).show()
+
+                                binding.txtNominal.setText("")
+                                binding.txtNotes.setText("")
+
+                                Navigation.findNavController(it).popBackStack()
+                            }
                         }
                 }
-                Navigation.findNavController(it).popBackStack()
             }
 
             val defaultDate = SimpleDateFormat("dd MMM yyyy  HH:mm a", Locale.getDefault()).format(Date())

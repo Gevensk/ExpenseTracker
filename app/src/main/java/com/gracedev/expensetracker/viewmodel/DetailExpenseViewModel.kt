@@ -2,6 +2,7 @@ package com.gracedev.expensetracker.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gracedev.expensetracker.model.Expense
 import com.gracedev.expensetracker.util.buildDb
@@ -14,6 +15,12 @@ import kotlin.coroutines.CoroutineContext
 class DetailExpenseViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
     private val job = Job()
     val expenseLD = MutableLiveData<Expense>()
+    val budgetNameLD = MutableLiveData<String>()
+
+    fun getBudgetNameById(budgetId: Int): LiveData<String> {
+        val db = buildDb(getApplication())
+        return db.budgetDao().getBudgetNameById(budgetId)
+    }
 
     fun addExpense(list: List<Expense>) {
         launch {

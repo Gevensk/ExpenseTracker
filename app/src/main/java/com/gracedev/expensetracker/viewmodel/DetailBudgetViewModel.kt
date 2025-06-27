@@ -16,11 +16,20 @@ class DetailBudgetViewModel (application: Application)
     : AndroidViewModel(application), CoroutineScope {
     private val job = Job()
     val budgetLD = MutableLiveData<Budget>()
+    val totalExpenseLD = MutableLiveData<Int>()
 
     fun addTodo(list: List<Budget>) {
         launch {
             val db =  buildDb(getApplication())
             db.budgetDao().insertAll(*list.toTypedArray())
+        }
+    }
+
+    fun fetchTotalExpense(budgetId: Int) {
+        launch {
+            val db = buildDb(getApplication())
+            val total = db.expenseDao().getTotalExpenseByBudgetIdDirect(budgetId) ?: 0
+            totalExpenseLD.postValue(total)
         }
     }
 

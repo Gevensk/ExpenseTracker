@@ -22,6 +22,9 @@ interface ExpenseDao {
     @Query("SELECT * FROM expense")
     fun selectAllExpense(): List<Expense>
 
+    @Query("SELECT * FROM expense ORDER BY date DESC")
+    fun selectAllExpenseOrdered(): List<Expense>
+
     @Query("SELECT * FROM expense WHERE uuid = :id")
     fun selectExpense(id: Int): Expense
 
@@ -30,6 +33,9 @@ interface ExpenseDao {
 
     @Query("SELECT SUM(nominal) FROM expense WHERE budget_id = :budgetId")
     fun getTotalExpenseByBudgetId(budgetId: Int): LiveData<Int?>
+
+    @Query("SELECT SUM(nominal) FROM expense WHERE budget_id = :budgetId")
+    fun getTotalExpenseByBudgetIdDirect(budgetId: Int): Int?
 
 //    @Query("SELECT SUM(nominal) FROM expense WHERE budget_id = :budgetId")
 //    fun getTotalExpenseByBudgetId(budgetId: Int): Int?
