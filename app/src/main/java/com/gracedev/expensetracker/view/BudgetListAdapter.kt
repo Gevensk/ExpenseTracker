@@ -6,6 +6,8 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gracedev.expensetracker.databinding.BudgetItemLayoutBinding
 import com.gracedev.expensetracker.model.Budget
+import java.text.NumberFormat
+import java.util.Locale
 
 class BudgetListAdapter(private val budgetList: ArrayList<Budget>)
     : RecyclerView.Adapter<BudgetListAdapter.BudgetViewHolder>() {
@@ -20,8 +22,13 @@ class BudgetListAdapter(private val budgetList: ArrayList<Budget>)
     }
 
     override fun onBindViewHolder(holder: BudgetViewHolder, position: Int) {
+        val formatter = NumberFormat.getNumberInstance(Locale("in", "ID"))
+        val budget = budgetList[position].budget
+
         holder.binding.txtName.text = budgetList[position].name
-        holder.binding.txtNominal.text=budgetList[position].budget.toString()
+
+        holder.binding.txtNominal.text = "IDR ${formatter.format(budget)}"
+
 
         holder.binding.txtName.setOnClickListener {
             val action =

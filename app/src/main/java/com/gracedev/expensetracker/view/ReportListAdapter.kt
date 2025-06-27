@@ -37,8 +37,8 @@ class ReportListAdapter(
 
         with(holder.binding) {
             txtBudgetName.text = budget.name
-            txtTotalBudget.text = "Total: IDR ${formatter.format(max)}"
-            txtUsedBudget.text = "Used: IDR ${formatter.format(used)}"
+            txtTotalBudget.text = "IDR ${formatter.format(max)}"
+            txtUsedBudget.text = "IDR ${formatter.format(used)}"
             txtBudgetLeft.text = "Budget Left: IDR ${formatter.format(left)}"
             progressBarBudget.max = max
             progressBarBudget.progress = used
