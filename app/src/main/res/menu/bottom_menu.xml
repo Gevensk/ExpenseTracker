@@ -11,4 +11,11 @@
         android:icon="@drawable/baseline_pie_chart_24"
         android:title="Budgeting"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/itemReport"
+        android:icon="@drawable/baseline_bar_chart_24"
+        android:title="Report"
+        app:showAsAction="always" />
+
 </menu>
