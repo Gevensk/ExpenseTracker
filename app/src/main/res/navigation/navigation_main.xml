@@ -28,6 +28,12 @@
         tools:layout="@layout/fragment_report" />
 
     <fragment
+        android:id="@+id/itemProfile"
+        android:name="com.gracedev.expensetracker.view.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
         android:id="@+id/itemBudgeting"
         android:name="com.gracedev.expensetracker.view.BudgetListFragment"
         android:label="fragment_budget_list"

@@ -7,6 +7,34 @@
         <variable
             name="user"
             type="com.gracedev.expensetracker.model.User" />
+        <variable
+            name="listener"
+            type="com.gracedev.expensetracker.view.EditPasswordListener" />
+
+<!--        <variable-->
+<!--            name="oldPassword"-->
+<!--            type="String" />-->
+
+<!--        <variable-->
+<!--            name="newPassword"-->
+<!--            type="String" />-->
+
+<!--        <variable-->
+<!--            name="repeatPassword"-->
+<!--            type="String" />-->
+
+        <variable
+            name="oldPassword"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="newPassword"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
+        <variable
+            name="repeatPassword"
+            type="androidx.lifecycle.MutableLiveData&lt;String>" />
+
     </data>
 
     <FrameLayout
@@ -40,11 +68,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/txtOldPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Old Password" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Old Password"
+                    android:inputType="textPassword"
+                    android:text="@={oldPassword}"/>
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -58,11 +91,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout13">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/txtNewPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="New Password" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="New Password"
+                    android:inputType="textPassword"
+                    android:text="@={newPassword}"/>
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -76,11 +114,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout11">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/txtRePassword"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Repeat Password" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Repeat Password"
+                    android:inputType="textPassword"
+                    android:text="@={repeatPassword}"/>
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -93,7 +136,8 @@
                 android:text="Sign Out"
                 android:textColor="#ff6750a4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout12" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout12"
+                android:onClick="@{listener::onSignOutClick}"/>
 
             <Button
                 android:id="@+id/btnChange"
@@ -103,7 +147,8 @@
                 android:layout_marginEnd="24dp"
                 android:text="Change Password"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout12" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout12"
+                android:onClick="@{listener::onChangePasswordClick}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

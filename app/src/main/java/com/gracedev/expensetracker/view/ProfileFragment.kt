@@ -7,13 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.gracedev.expensetracker.SignActivity
 import com.gracedev.expensetracker.databinding.FragmentProfileBinding
 import com.gracedev.expensetracker.viewmodel.UserViewModel
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), EditPasswordListener {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var viewModel: UserViewModel
 
@@ -35,20 +37,44 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSignOut.setOnClickListener {
-            val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
-            sharedPref.edit().clear().apply()
+        viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-            val intent = Intent(requireActivity(), SignActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
+        binding.oldPassword = viewModel.oldPassword
+        binding.newPassword = viewModel.newPassword
+        binding.repeatPassword = viewModel.repeatPassword
 
-        binding.btnChange.setOnClickListener{
-            val oldPassword = binding.txtOldPassword.text.toString()
-            val newPassword = binding.txtNewPassword.text.toString()
-            val rePassword = binding.txtRePassword.text.toString()
-        }
+        binding.listener = this
+
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        viewModel.passwordChangeResult.observe(viewLifecycleOwner, Observer { success ->
+            if (success) {
+                // Misal: Beri Toast sukses
+                Toast.makeText(context, "Password updated successfully", Toast.LENGTH_SHORT).show()
+                // Bersihkan input
+                viewModel.oldPassword.value = ""
+                viewModel.newPassword.value = ""
+                viewModel.repeatPassword.value = ""
+            } else {
+                // Jika gagal
+                Toast.makeText(context, "Password update failed", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+//        binding.btnSignOut.setOnClickListener {
+//            val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+//            sharedPref.edit().clear().apply()
+//
+//            val intent = Intent(requireActivity(), SignActivity::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            startActivity(intent)
+//        }
+//
+//        binding.btnChange.setOnClickListener{
+//            val oldPassword = binding.txtOldPassword.text.toString()
+//            val newPassword = binding.txtNewPassword.text.toString()
+//            val rePassword = binding.txtRePassword.text.toString()
+//        }
     }
 
     fun observeViewModel() {
@@ -66,5 +92,19 @@ class ProfileFragment : Fragment() {
 
                 }
             }
+    }
+
+    override fun onSignOutClick(v: View) {
+        // Hapus session dan navigasi ke SignActivity
+        val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        sharedPref.edit().clear().apply()
+        val intent = Intent(requireActivity(), SignActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    override fun onChangePasswordClick(v: View) {
+        // Saat tombol Change Password ditekan, jalankan logika changePassword di ViewModel
+        viewModel.changePassword()
     }
 }

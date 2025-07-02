@@ -18,6 +18,9 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE uuid = :id")
     fun getUserById(id: Int): LiveData<User>
 
+    @Query("UPDATE user SET password = :newPassword WHERE username = :username")
+    fun updatePassword(username: String, newPassword: String)
+
     @Update
     fun updateUser(user: User)
 
