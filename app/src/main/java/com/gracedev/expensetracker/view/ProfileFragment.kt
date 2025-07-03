@@ -55,9 +55,12 @@ class ProfileFragment : Fragment(), EditPasswordListener {
                 viewModel.oldPassword.value = ""
                 viewModel.newPassword.value = ""
                 viewModel.repeatPassword.value = ""
-            } else {
-                // Jika gagal
-                Toast.makeText(context, "Password update failed", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer { message ->
+            message?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
             }
         })
 
@@ -95,7 +98,6 @@ class ProfileFragment : Fragment(), EditPasswordListener {
     }
 
     override fun onSignOutClick(v: View) {
-        // Hapus session dan navigasi ke SignActivity
         val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
         sharedPref.edit().clear().apply()
         val intent = Intent(requireActivity(), SignActivity::class.java)
@@ -104,7 +106,6 @@ class ProfileFragment : Fragment(), EditPasswordListener {
     }
 
     override fun onChangePasswordClick(v: View) {
-        // Saat tombol Change Password ditekan, jalankan logika changePassword di ViewModel
         viewModel.changePassword()
     }
 }

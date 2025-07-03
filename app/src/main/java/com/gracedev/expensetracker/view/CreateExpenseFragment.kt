@@ -47,10 +47,12 @@ class CreateExpenseFragment : Fragment() {
                     val budgetId = selectedBudget.uuid
                     val totalBudget = selectedBudget.budget
 
+
                     // Observe total expense dari ViewModel
                     expenseViewModel.getTotalExpenseByBudgetId(budgetId)
                         .observe(viewLifecycleOwner) { totalExpense ->
                             val used = totalExpense ?: 0
+                            val remaining = totalBudget - used
 
                             // Set progress bar
                             binding.progressBar.max = totalBudget
@@ -59,6 +61,8 @@ class CreateExpenseFragment : Fragment() {
                             // Update TextView
                             binding.txtUsedBudget.text = "IDR ${formatter.format(used)}"
                             binding.txtTotalBudget.text = "IDR ${formatter.format(totalBudget)}"
+
+                            binding.txtNominal.hint = "Nominal (IDR ${formatter.format(remaining)} left)"
                         }
                 }
 
@@ -76,7 +80,10 @@ class CreateExpenseFragment : Fragment() {
 
                     val name = binding.txtNotes.text.toString()
                     val nominal = binding.txtNominal.text.toString().toIntOrNull() ?: 0
-                    val date = binding.txtDate.text.toString()
+
+                    val formatDate = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale("in", "ID"))
+                    val dateParsed = formatDate.parse(binding.txtDate.text.toString())
+                    val date = (dateParsed?.time ?: System.currentTimeMillis()) / 1000L
 
                     expenseViewModel.getTotalExpenseByBudgetId(budgetId)
                         .observe(viewLifecycleOwner) { totalExpense ->
@@ -99,7 +106,7 @@ class CreateExpenseFragment : Fragment() {
                                 val newExpense = com.gracedev.expensetracker.model.Expense(
                                     name = name,
                                     nominal = nominal,
-                                    date = date,
+                                    date = date.toInt(),
                                     budgetId = budgetId
                                 )
 
@@ -117,7 +124,7 @@ class CreateExpenseFragment : Fragment() {
                 }
             }
 
-            val defaultDate = SimpleDateFormat("dd MMM yyyy  HH:mm a", Locale.getDefault()).format(Date())
+            val defaultDate = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale("in", "ID")).format(Date())
             binding.txtDate.text = defaultDate
 
             binding.txtDate.setOnClickListener {

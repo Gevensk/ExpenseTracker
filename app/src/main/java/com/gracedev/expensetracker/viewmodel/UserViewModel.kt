@@ -26,6 +26,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application), C
     val newPassword = MutableLiveData<String>()
     val repeatPassword = MutableLiveData<String>()
 
+    val errorMessage = MutableLiveData<String>()
+
     val passwordChangeResult = MutableLiveData<Boolean>()
 
     fun login(username: String, password: String) {
@@ -60,7 +62,14 @@ class UserViewModel(application: Application) : AndroidViewModel(application), C
         val newPass = newPassword.value ?: ""
         val repeatPass = repeatPassword.value ?: ""
 
+        if (oldPass.isBlank() || newPass.isBlank() || repeatPass.isBlank()) {
+            errorMessage.postValue("Semua kolom harus diisi.")
+            passwordChangeResult.postValue(false)
+            return
+        }
+
         if (newPass != repeatPass) {
+            errorMessage.postValue("Password baru dan ulangi password tidak cocok.")
             passwordChangeResult.postValue(false)
             return
         }
@@ -69,20 +78,27 @@ class UserViewModel(application: Application) : AndroidViewModel(application), C
         val username = sharedPref.getString("username", null)
 
         if (username == null) {
+            errorMessage.postValue("Gagal mendapatkan data pengguna dari session.")
             passwordChangeResult.postValue(false)
             return
         }
 
         launch {
-            val db = buildDb(getApplication())
-            val user = db.userDao().login(username, oldPass)
-            if (user != null) {
-                db.userDao().updatePassword(username, newPass)
-                passwordChangeResult.postValue(true)
-            } else {
+            try {
+                val db = buildDb(getApplication())
+                val user = db.userDao().login(username, oldPass)
+
+                if (user != null) {
+                    db.userDao().updatePassword(username, newPass)
+                    passwordChangeResult.postValue(true)
+                } else {
+                    errorMessage.postValue("Password lama salah.")
+                    passwordChangeResult.postValue(false)
+                }
+            } catch (e: Exception) {
+                errorMessage.postValue("Terjadi kesalahan saat mengubah password.")
                 passwordChangeResult.postValue(false)
             }
         }
     }
-
 }

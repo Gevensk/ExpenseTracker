@@ -16,12 +16,17 @@ import com.gracedev.expensetracker.model.Expense
 import com.gracedev.expensetracker.viewmodel.DetailExpenseViewModel
 import com.gracedev.expensetracker.viewmodel.ListBudgetViewModel
 import com.gracedev.expensetracker.viewmodel.ListExpenseViewModel
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class ExpenseDetailFragment : DialogFragment() {
     private lateinit var binding: FragmentExpenseDetailBinding
     private var expense: Expense? = null
     private lateinit var viewModel: DetailExpenseViewModel
+    val formatter = NumberFormat.getNumberInstance(Locale("in", "ID"))
 
     override fun onStart() {
         super.onStart()
@@ -50,9 +55,14 @@ class ExpenseDetailFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[DetailExpenseViewModel::class.java]
+        val timestamp = expense?.date ?: 0
+        val dateFormatted = SimpleDateFormat("dd MMM yyyy HH:mm", Locale("in", "ID"))
+            .format(Date(timestamp * 1000L))
+
+
         binding.txtDetail.text = expense?.name
-        binding.txtDate.text = expense?.date
-        binding.txtNominal.text = expense?.nominal?.toString()
+        binding.txtDate.text = dateFormatted
+        binding.txtNominal.text = "IDR ${formatter.format(expense?.nominal)}"
 
         viewModel.getBudgetNameById(expense?.budgetId ?:0).observe(viewLifecycleOwner) { name ->
             binding.chipBudget.text = name

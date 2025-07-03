@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gracedev.expensetracker.databinding.ExpenseItemLayoutBinding
 import com.gracedev.expensetracker.model.Expense
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class ExpenseListAdapter(private val expenseList: ArrayList<Expense>,
@@ -35,10 +37,12 @@ class ExpenseListAdapter(private val expenseList: ArrayList<Expense>,
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         val expense = expenseList[position]
         val formatter = NumberFormat.getNumberInstance(Locale("in", "ID"))
-        holder.binding.txtDate.text = expense.date
+        val dateFormatted = SimpleDateFormat("dd MMM yyyy HH:mm", Locale("in", "ID"))
+            .format(Date(expense.date * 1000L))
+
+        holder.binding.txtDate.text = dateFormatted
         holder.binding.textNominal.text = "IDR ${formatter.format(expense.nominal)}"
 
-        // Ambil nama budget dari map
         val budgetName = budgetMap[expense.budgetId] ?: "Unknown"
         holder.binding.chipBudget.text = budgetName
 

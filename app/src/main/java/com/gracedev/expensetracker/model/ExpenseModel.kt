@@ -16,7 +16,7 @@ data class Expense(
     var nominal: Int,
 
     @ColumnInfo(name = "date")
-    var date: String,
+    var date: Int,
 
     @ColumnInfo(name = "budget_id")
     var budgetId: Int
