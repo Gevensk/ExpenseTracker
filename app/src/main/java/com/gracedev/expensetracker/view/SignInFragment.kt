@@ -41,36 +41,46 @@ class SignInFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        binding.btnSignUp.setOnClickListener{
+        binding.btnSignUp.setOnClickListener {
             val action = SignInFragmentDirections.actionSignUp()
             Navigation.findNavController(it).navigate(action)
         }
 
         binding.btnSignIn.setOnClickListener {
-            val username = binding.txtUsername.text.toString()
-            val password = binding.txtPassword.text.toString()
+            inputValid()
+        }
+    }
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(context, "Username dan Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
+    private fun inputValid() {
+        val username = binding.txtUsername.text.toString().trim()
+        val password = binding.txtPassword.text.toString().trim()
+
+        if (username.isEmpty()) {
+            Toast.makeText(context, "Username tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (password.isEmpty()) {
+            Toast.makeText(context, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        viewModel.login(username, password)
+
+        viewModel.userLD.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+                sharedPref.edit()
+                    .putString("username", user.username)
+                    .putInt("uuid", user.uuid)
+                    .putBoolean("isLogin", true)
+                    .apply()
+
+                val intent = Intent(activity, MainActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
             } else {
-                viewModel.login(username, password)
-            }
-
-            viewModel.userLD.observe(viewLifecycleOwner) { user ->
-                if (user != null) {
-                    val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
-                    sharedPref.edit()
-                        .putString("username", user.username)
-                        .putInt("uuid", user.uuid)
-                        .putBoolean("isLogin", true)
-                        .apply()
-
-                    val intent = Intent(activity, MainActivity::class.java)
-                    startActivity(intent)
-                    activity?.finish()
-                } else {
-                    Toast.makeText(context, "Username atau Password salah", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(context, "Username atau password salah", Toast.LENGTH_SHORT).show()
             }
         }
     }

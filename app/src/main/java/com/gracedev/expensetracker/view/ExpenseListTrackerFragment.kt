@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -44,9 +45,13 @@ class ExpenseListTrackerFragment : Fragment() {
         observeViewModel()
 
 
-        binding.btnFab.setOnClickListener {
-            val action = ExpenseListTrackerFragmentDirections.actionCreateExpenseFragment()
-            Navigation.findNavController(it).navigate(action)
+        binding.btnFab.setOnClickListener { view ->
+            if (budgetMap.isEmpty()) {
+                Toast.makeText(requireContext(), "Please create a budget before adding expenses.", Toast.LENGTH_SHORT).show()
+            } else {
+                val action = ExpenseListTrackerFragmentDirections.actionCreateExpenseFragment()
+                Navigation.findNavController(view).navigate(action)
+            }
         }
 
         budgetViewModel = ViewModelProvider(this).get(ListBudgetViewModel::class.java)

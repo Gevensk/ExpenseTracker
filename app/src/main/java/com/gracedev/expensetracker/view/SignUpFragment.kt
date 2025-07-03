@@ -75,28 +75,45 @@ class SignUpFragment : Fragment() {
     }
 
     private fun inputValid(): Boolean {
-        val username = binding.txtUsername.text.toString()
-        val password = binding.txtPassword.text.toString()
-        val firstName = binding.txtFirstName.text.toString()
-        val lastName = binding.txtLastName.text.toString()
-        val repeatPassword = binding.txtRePassword.text.toString()
+        val username = binding.txtUsername.text.toString().trim()
+        val password = binding.txtPassword.text.toString().trim()
+        val repeatPassword = binding.txtRePassword.text.toString().trim()
+        val firstName = binding.txtFirstName.text.toString().trim()
+        val lastName = binding.txtLastName.text.toString().trim()
 
         if (username.isEmpty()) {
             Toast.makeText(context, "Username tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return false
-        } else if (password.isEmpty() || repeatPassword.isEmpty()) {
+        }
+
+        if (firstName.isEmpty()) {
+            Toast.makeText(context, "First name tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (lastName.isEmpty()) {
+            Toast.makeText(context, "Last name tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (password.isEmpty()) {
             Toast.makeText(context, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return false
-        } else if (firstName.isEmpty() || lastName.isEmpty()){
-            Toast.makeText(context, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show()
+        }
+
+        if (repeatPassword.isEmpty()) {
+            Toast.makeText(context, "Ulangi password tidak boleh kosong", Toast.LENGTH_SHORT).show()
             return false
-        }else if (password != repeatPassword) {
+        }
+
+        if (password != repeatPassword) {
             Toast.makeText(context, "Password tidak cocok", Toast.LENGTH_SHORT).show()
             return false
-        } else {
-            return true
         }
+
+        return true
     }
+
 
     companion object {
         @JvmStatic

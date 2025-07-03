@@ -19,7 +19,10 @@ data class Expense(
     var date: Int,
 
     @ColumnInfo(name = "budget_id")
-    var budgetId: Int
+    var budgetId: Int,
+    @ColumnInfo(name = "user_id")
+    var userId: Int
+
 ) : Parcelable {
     @PrimaryKey(autoGenerate = true)
     var uuid: Int = 0
