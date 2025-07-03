@@ -25,25 +25,25 @@ class DetailBudgetViewModel (application: Application)
         }
     }
 
-    fun fetchTotalExpense(budgetId: Int) {
+    fun fetchTotalExpense(budgetId: Int, userId:Int) {
         launch {
             val db = buildDb(getApplication())
-            val total = db.expenseDao().getTotalExpenseByBudgetIdDirect(budgetId) ?: 0
+            val total = db.expenseDao().getTotalExpenseByBudgetIdDirect(budgetId, userId) ?: 0
             totalExpenseLD.postValue(total)
         }
     }
 
-    fun fetch(uuid:Int) {
+    fun fetch(uuid:Int, userId:Int) {
         launch {
             val db = buildDb(getApplication())
-            budgetLD.postValue(db.budgetDao().selectBudget(uuid))
+            budgetLD.postValue(db.budgetDao().selectBudget(uuid, userId))
         }
     }
 
-    fun update(name:String, budget:Int, uuid:Int) {
+    fun update(name:String, budget:Int, uuid:Int, userId:Int) {
         launch {
             val db = buildDb(getApplication())
-            db.budgetDao().update(name, budget, uuid)
+            db.budgetDao().update(name, budget, uuid, userId)
         }
     }
 

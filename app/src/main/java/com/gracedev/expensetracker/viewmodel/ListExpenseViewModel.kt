@@ -1,6 +1,7 @@
 package com.gracedev.expensetracker.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.gracedev.expensetracker.model.Expense
@@ -23,35 +24,35 @@ class ListExpenseViewModel(application: Application)
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
 
-    fun refresh() {
+    fun refresh(userId:Int) {
         loadingLD.value = true
         expenseLoadErrorLD.value = false
         launch {
             val db = buildDb(getApplication())
-            expenseLD.postValue(db.expenseDao().selectAllExpenseOrdered())
+            expenseLD.postValue(db.expenseDao().selectAllExpenseOrdered(userId))
             loadingLD.postValue(false)
         }
     }
 
-    fun getTotalExpenseByBudgetId(budgetId: Int) =
-        buildDb(getApplication()).expenseDao().getTotalExpenseByBudgetId(budgetId)
+    fun getTotalExpenseByBudgetId(budgetId: Int, userId:Int) =
+        buildDb(getApplication()).expenseDao().getTotalExpenseByBudgetId(budgetId, userId)
 
 
-    fun refreshByBudget(budgetId: Int) {
+    fun refreshByBudget(budgetId: Int, userId:Int) {
         loadingLD.value = true
         expenseLoadErrorLD.value = false
         launch {
             val db = buildDb(getApplication())
-            expenseLD.postValue(db.expenseDao().selectExpenseByBudgetId(budgetId))
+            expenseLD.postValue(db.expenseDao().selectExpenseByBudgetId(budgetId, userId))
             loadingLD.postValue(false)
         }
     }
 
-    fun clearExpense(expense: Expense) {
+    fun clearExpense(expense: Expense, userId:Int) {
         launch {
             val db = BudgetDatabase.buildDatabase(getApplication())
             db.expenseDao().deleteExpense(expense)
-            expenseLD.postValue(db.expenseDao().selectAllExpenseOrdered())
+            expenseLD.postValue(db.expenseDao().selectAllExpenseOrdered(userId))
         }
     }
 }

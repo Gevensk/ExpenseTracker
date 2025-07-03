@@ -10,25 +10,26 @@ import androidx.room.Update
 
 @Dao
 interface BudgetDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg budget:Budget)
 
-    @Query("UPDATE budget SET name = :name, budget = :budget WHERE uuid = :uuid")
-    fun update(name: String, budget: Int, uuid: Int)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg budget: Budget)
+
+    @Query("UPDATE budget SET name = :name, budget = :budget WHERE uuid = :uuid AND user_id = :userId")
+    fun update(name: String, budget: Int, uuid: Int, userId: Int)
 
     @Update
-    fun updateBudget(budget:Budget)
+    fun updateBudget(budget: Budget)
 
-    @Query("SELECT * FROM budget")
-    fun selectAllBudget(): List<Budget>
+    @Query("SELECT * FROM budget WHERE user_id = :userId")
+    fun selectAllBudget(userId: Int): List<Budget>
 
-    @Query("SELECT name FROM budget WHERE uuid = :budgetId")
-    fun getBudgetNameById(budgetId: Int): LiveData<String>
+    @Query("SELECT name FROM budget WHERE uuid = :budgetId AND user_id = :userId")
+    fun getBudgetNameById(budgetId: Int, userId: Int): LiveData<String>
 
-    @Query("SELECT * FROM budget WHERE uuid= :id")
-    fun selectBudget(id:Int): Budget
+    @Query("SELECT * FROM budget WHERE uuid = :id AND user_id = :userId")
+    fun selectBudget(id: Int, userId: Int): Budget?
 
     @Delete
-    fun deleteBudget(budget:Budget)
-
+    fun deleteBudget(budget: Budget)
 }
+

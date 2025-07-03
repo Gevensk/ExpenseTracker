@@ -17,9 +17,9 @@ class DetailExpenseViewModel(application: Application) : AndroidViewModel(applic
     val expenseLD = MutableLiveData<Expense>()
     val budgetNameLD = MutableLiveData<String>()
 
-    fun getBudgetNameById(budgetId: Int): LiveData<String> {
+    fun getBudgetNameById(budgetId: Int, userId:Int): LiveData<String> {
         val db = buildDb(getApplication())
-        return db.budgetDao().getBudgetNameById(budgetId)
+        return db.budgetDao().getBudgetNameById(budgetId, userId)
     }
 
     fun addExpense(list: List<Expense>) {
@@ -29,17 +29,17 @@ class DetailExpenseViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun fetch(uuid: Int) {
+    fun fetch(uuid: Int, userId:Int) {
         launch {
             val db = buildDb(getApplication())
-            expenseLD.postValue(db.expenseDao().selectExpense(uuid))
+            expenseLD.postValue(db.expenseDao().selectExpense(uuid, userId))
         }
     }
 
-    fun update(name: String, nominal: Int, date: String, budgetId: Int, uuid: Int) {
+    fun update(name: String, nominal: Int, date: Int, budgetId: Int, uuid: Int, userId:Int) {
         launch {
             val db = buildDb(getApplication())
-            db.expenseDao().update(name, nominal, date, budgetId, uuid)
+            db.expenseDao().update(name, nominal, date, budgetId, uuid, userId)
         }
     }
 

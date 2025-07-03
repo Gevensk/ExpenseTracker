@@ -1,5 +1,7 @@
 package com.gracedev.expensetracker.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,11 +21,17 @@ class BudgetListFragment : Fragment() {
     private lateinit var viewModel:ListBudgetViewModel
     private val todoListAdapter  = BudgetListAdapter(arrayListOf())
 
+    private lateinit var sharedPref: SharedPreferences
+    private var userId: Int = -1
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        userId = sharedPref.getInt("uuid", -1)
+
         viewModel = ViewModelProvider(this).get(ListBudgetViewModel::class.java)
-        viewModel.refresh()
+        viewModel.refresh(userId)
         binding.recViewBudget.layoutManager = LinearLayoutManager(context)
         binding.recViewBudget.adapter = todoListAdapter
 

@@ -22,10 +22,10 @@ class ReportViewModel(application: Application) : AndroidViewModel(application),
     val totalExpense = MutableLiveData<Int>()
     val totalBudget = MutableLiveData<Int>()
 
-    fun refresh() {
+    fun refresh(userId:Int) {
         launch {
             val db = buildDb(getApplication())
-            val budgets = db.budgetDao().selectAllBudget()
+            val budgets = db.budgetDao().selectAllBudget(userId)
 
             val usedMap = mutableMapOf<Int, Int>()
             var totalUsed = 0
@@ -33,7 +33,7 @@ class ReportViewModel(application: Application) : AndroidViewModel(application),
 
             for (budget in budgets) {
                 // Safe cast result to Int if DAO return type isn't yet Int?
-                val used = db.expenseDao().getTotalExpenseByBudgetId(budget.uuid) as? Int ?: 0
+                val used = db.expenseDao().getTotalExpenseByBudgetId(budget.uuid, userId) as? Int ?: 0
                 usedMap[budget.uuid] = used
                 totalUsed += used
                 totalMax += budget.budget

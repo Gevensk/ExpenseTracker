@@ -20,6 +20,7 @@ data class Expense(
 
     @ColumnInfo(name = "budget_id")
     var budgetId: Int,
+
     @ColumnInfo(name = "user_id")
     var userId: Int
 

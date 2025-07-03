@@ -1,5 +1,7 @@
 package com.gracedev.expensetracker.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,9 +28,15 @@ class ExpenseListTrackerFragment : Fragment() {
     private var budgetMap = mutableMapOf<Int, String>()
     private lateinit var expense: ArrayList<Expense>
 
+    private lateinit var sharedPref: SharedPreferences
+    private var userId: Int = -1
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        userId = sharedPref.getInt("uuid", -1)  // -1 sebagai default jika tidak ditemukan
 
         expenseAdapter = ExpenseListAdapter(arrayListOf()) { selectedExpense ->
             val dialog = ExpenseDetailFragment.newInstance(selectedExpense)
@@ -37,7 +45,7 @@ class ExpenseListTrackerFragment : Fragment() {
         binding.recViewExpense.adapter = expenseAdapter
 
         viewModel = ViewModelProvider(this).get(ListExpenseViewModel::class.java)
-        viewModel.refresh()
+        viewModel.refresh(userId)
 
         binding.recViewExpense.adapter = expenseAdapter
         binding.recViewExpense.layoutManager = LinearLayoutManager(context)
@@ -55,7 +63,7 @@ class ExpenseListTrackerFragment : Fragment() {
         }
 
         budgetViewModel = ViewModelProvider(this).get(ListBudgetViewModel::class.java)
-        budgetViewModel.refresh()
+        budgetViewModel.refresh(userId)
 
         budgetViewModel.budgetLD.observe(viewLifecycleOwner, Observer { budgets ->
             budgetMap.clear()

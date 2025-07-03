@@ -23,24 +23,24 @@ class ListBudgetViewModel (application: Application)
         get() = job + Dispatchers.IO
 
 
-    fun refresh() {
+    fun refresh(userId:Int) {
         loadingLD.value = true
         budgetLoadErrorLD.value = false
         launch {
             val db = buildDb(getApplication())
-            budgetLD.postValue(db.budgetDao().selectAllBudget())
+            budgetLD.postValue(db.budgetDao().selectAllBudget(userId))
             loadingLD.postValue(false)
         }
     }
 
-    fun clearTask(budget: Budget) {
+    fun clearTask(budget: Budget, userId:Int) {
         launch {
             val db = BudgetDatabase.buildDatabase(
                 getApplication()
             )
             db.budgetDao().deleteBudget(budget)
 
-            budgetLD.postValue(db.budgetDao().selectAllBudget())
+            budgetLD.postValue(db.budgetDao().selectAllBudget(userId))
         }
     }
 

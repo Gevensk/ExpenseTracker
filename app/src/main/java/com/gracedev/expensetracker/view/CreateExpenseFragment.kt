@@ -17,6 +17,8 @@ import com.gracedev.expensetracker.viewmodel.ListExpenseViewModel
 import java.text.NumberFormat
 import java.util.Locale
 import android.app.DatePickerDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,12 +29,18 @@ class CreateExpenseFragment : Fragment() {
     private lateinit var expenseViewModel: ListExpenseViewModel
     val formatter = NumberFormat.getNumberInstance(Locale("in", "ID"))
 
+    private lateinit var sharedPref: SharedPreferences
+    private var userId: Int = -1
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         expenseViewModel = ViewModelProvider(this).get(ListExpenseViewModel::class.java)
 
+        sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        userId = sharedPref.getInt("uuid", -1)  // -1 sebagai default jika tidak ditemukan
+
         viewModel = ViewModelProvider(this).get(ListBudgetViewModel::class.java)
-        viewModel.refresh()
+        viewModel.refresh(userId)
 
         viewModel.budgetLD.observe(viewLifecycleOwner, Observer { budgets ->
             val spinnerItems = budgets.map { it.name }
@@ -49,7 +57,7 @@ class CreateExpenseFragment : Fragment() {
 
 
                     // Observe total expense dari ViewModel
-                    expenseViewModel.getTotalExpenseByBudgetId(budgetId)
+                    expenseViewModel.getTotalExpenseByBudgetId(budgetId, userId)
                         .observe(viewLifecycleOwner) { totalExpense ->
                             val used = totalExpense ?: 0
                             val remaining = totalBudget - used
@@ -81,11 +89,11 @@ class CreateExpenseFragment : Fragment() {
                     val name = binding.txtNotes.text.toString()
                     val nominal = binding.txtNominal.text.toString().toIntOrNull() ?: 0
 
-                    val formatDate = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale("in", "ID"))
+                    val formatDate = SimpleDateFormat("dd MMMM yyyy hh.mm a", Locale("in", "ID"))
                     val dateParsed = formatDate.parse(binding.txtDate.text.toString())
                     val date = (dateParsed?.time ?: System.currentTimeMillis()) / 1000L
 
-                    expenseViewModel.getTotalExpenseByBudgetId(budgetId)
+                    expenseViewModel.getTotalExpenseByBudgetId(budgetId, userId)
                         .observe(viewLifecycleOwner) { totalExpense ->
                             val used = totalExpense ?: 0
                             val remaining = totalBudget - used
@@ -107,7 +115,8 @@ class CreateExpenseFragment : Fragment() {
                                     name = name,
                                     nominal = nominal,
                                     date = date.toInt(),
-                                    budgetId = budgetId
+                                    budgetId = budgetId,
+                                    userId = userId
                                 )
 
                                 val detailViewModel = ViewModelProvider(this)[com.gracedev.expensetracker.viewmodel.DetailExpenseViewModel::class.java]
@@ -124,7 +133,7 @@ class CreateExpenseFragment : Fragment() {
                 }
             }
 
-            val defaultDate = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale("in", "ID")).format(Date())
+            val defaultDate = SimpleDateFormat("dd MMMM yyyy hh.mm a", Locale("in", "ID")).format(Date())
             binding.txtDate.text = defaultDate
 
             binding.txtDate.setOnClickListener {

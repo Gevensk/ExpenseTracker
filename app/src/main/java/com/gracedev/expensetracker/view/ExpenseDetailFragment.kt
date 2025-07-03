@@ -1,5 +1,7 @@
 package com.gracedev.expensetracker.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -28,6 +30,9 @@ class ExpenseDetailFragment : DialogFragment() {
     private lateinit var viewModel: DetailExpenseViewModel
     val formatter = NumberFormat.getNumberInstance(Locale("in", "ID"))
 
+    private lateinit var sharedPref: SharedPreferences
+    private var userId: Int = -1
+
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
@@ -54,6 +59,10 @@ class ExpenseDetailFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
+
+        sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        userId = sharedPref.getInt("uuid", -1)  // -1 sebagai default jika tidak ditemukan
+
         viewModel = ViewModelProvider(this)[DetailExpenseViewModel::class.java]
         val timestamp = expense?.date ?: 0
         val dateFormatted = SimpleDateFormat("dd MMM yyyy HH:mm", Locale("in", "ID"))
@@ -64,7 +73,7 @@ class ExpenseDetailFragment : DialogFragment() {
         binding.txtDate.text = dateFormatted
         binding.txtNominal.text = "IDR ${formatter.format(expense?.nominal)}"
 
-        viewModel.getBudgetNameById(expense?.budgetId ?:0).observe(viewLifecycleOwner) { name ->
+        viewModel.getBudgetNameById(expense?.budgetId ?:0, userId).observe(viewLifecycleOwner) { name ->
             binding.chipBudget.text = name
         }
     }

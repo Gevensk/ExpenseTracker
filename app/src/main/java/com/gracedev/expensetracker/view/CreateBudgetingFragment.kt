@@ -1,5 +1,7 @@
 package com.gracedev.expensetracker.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,8 +20,15 @@ class CreateBudgetingFragment : Fragment() {
     private lateinit var binding:FragmentCreateBudgetingBinding
     private lateinit var viewModel:DetailBudgetViewModel
 
+    private lateinit var sharedPref: SharedPreferences
+    private var userId: Int = -1
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        userId = sharedPref.getInt("uuid", -1)
+
         viewModel = ViewModelProvider(this).get(DetailBudgetViewModel::class.java)
         binding.btnAdd.setOnClickListener {
             val nama = binding.txtNama.text.toString()
@@ -37,7 +46,7 @@ class CreateBudgetingFragment : Fragment() {
                     Toast.makeText(view.context, "Nominal harus angka positif", Toast.LENGTH_SHORT).show()
                 }
                 else {
-                    val budget = Budget(nama, nominal)
+                    val budget = Budget(nama, nominal, userId)
                     val list = listOf(budget)
                     viewModel.addTodo(list)
                     Toast.makeText(view.context, "Data added", Toast.LENGTH_SHORT).show()

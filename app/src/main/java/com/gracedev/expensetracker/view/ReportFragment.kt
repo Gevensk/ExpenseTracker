@@ -1,5 +1,7 @@
 package com.gracedev.expensetracker.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,14 +22,21 @@ class ReportFragment : Fragment() {
     private lateinit var budgetViewModel: ListBudgetViewModel
     private lateinit var expenseViewModel: ListExpenseViewModel
 
+    private lateinit var sharedPref: SharedPreferences
+    private var userId: Int = -1
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        userId = sharedPref.getInt("uuid", -1)  // -1 sebagai default jika tidak ditemukan
 
         budgetViewModel = ViewModelProvider(this).get(ListBudgetViewModel::class.java)
         expenseViewModel = ViewModelProvider(this).get(ListExpenseViewModel::class.java)
 
-        budgetViewModel.refresh()
-        expenseViewModel.refresh()
+        budgetViewModel.refresh(userId)
+        expenseViewModel.refresh(userId)
 
         budgetViewModel.budgetLD.observe(viewLifecycleOwner) { budgets ->
             expenseViewModel.expenseLD.observe(viewLifecycleOwner) { expenses ->
